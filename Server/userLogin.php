@@ -1,6 +1,11 @@
 <?php
 include('DBstart.php');
-session_start();
+
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
+
 $error = array();
 
 if(isset($_POST['loginButton'])){
@@ -11,18 +16,48 @@ if(isset($_POST['loginButton'])){
     if(mysqli_num_rows($check_login_result) > 0 ){
         //check co => dang nhap thanh cong
         
-        $select_name_query = "select last_name, middle_name, first_name from scientist, account where account.username='$user_name' and scientist.id = account.id";
+        $select_name_query = "select scientist.id, last_name, middle_name, first_name from scientist, account where account.username='$user_name' and scientist.id = account.id";
         $select_name_result = mysqli_query($connect_handle, $select_name_query);
         $data = mysqli_fetch_assoc($select_name_result);
+        //get full user name
         $username = $data['last_name']." ".$data['middle_name']." ".$data['first_name'];
+        $userid = $data['id'];
         $_SESSION['username'] = $username;
+        $_SESSION['userid']=$userid;
+        //check role
+        $_SESSION['role_editor'] = FALSE;
+        $_SESSION['role_reviewer'] = FALSE;
+        $_SESSION['role_author'] = FALSE;
+        //editor 
         $select_role_query = "select * from account where username='$user_name' and id in (select id from editor)";
         $select_role_result = mysqli_query($connect_handle, $select_role_query);
         if(mysqli_num_rows($select_role_result) == 1){
-            $_SESSION['role'] = 'editor';
+            $_SESSION['role_editor'] = TRUE;
         }
-        header('location: Client/homepage.php');
-        exit();
+
+        //reviewer 
+        $select_role_query = "select * from account where username='$user_name' and id in (select id from reviewer)";
+        $select_role_result = mysqli_query($connect_handle, $select_role_query);
+        if(mysqli_num_rows($select_role_result) == 1){
+            $_SESSION['role_reviewer'] = TRUE;
+        }
+
+        //reviewer 
+        $select_role_query = "select * from account where username='$user_name' and id in (select id from author)";
+        $select_role_result = mysqli_query($connect_handle, $select_role_query);
+        if(mysqli_num_rows($select_role_result) == 1){
+            $_SESSION['role_author'] = TRUE;
+        }
+        if($_SESSION['role_editor'] == TRUE){
+             // (editor / reviewer / author) -> editor
+            header('location: Client/editorHomepage.php');
+        }elseif($_SESSION['role_reviewer'] == TRUE){
+            //not editor => (reviewer / author) -> if(reviewer) -> reviewer
+            header('location: Client/reviewerHomepage.php');
+        }else{
+            //not editor, reviewer => author -> author
+            header('location: Client/authorHomepage.php');
+        }
     }else{
         array_push($error, "Sai tên đăng nhập hoặc mật khẩu");
         echo 
@@ -37,6 +72,6 @@ if(isset($_POST['loginButton'])){
 if(isset($_GET['logout'])){
     session_destroy();
     unset($_SESSION['username']);
-    header('location: ../SignIn/index.php');
+    header('location: index.php');
 }
 ?>

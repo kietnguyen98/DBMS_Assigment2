@@ -54,11 +54,6 @@ if(isset($_POST['signUpButton'])){
         if(mysqli_num_rows($check_username_result) == 0){
             //username phu hop
             if(count($error)==0){
-                //insert data vao account
-                $account_num = mysqli_num_rows(mysqli_query($connect_handle,"select id from account"));
-                $insert_account_id = getNewId($account_num + 1);
-                $insert_query = "insert into account values ('$insert_account_id','$user_name','$password')";
-                $insert_result = mysqli_query($connect_handle, $insert_query);
                 //insert data vao scientist
                 $check = "select * from scientist where id = '$insert_account_id'";
                 $check_result = mysqli_query($connect_handle, $check);
@@ -67,6 +62,11 @@ if(isset($_POST['signUpButton'])){
                     $update_query = "update scientist 
                     set last_name = '$lastname', middle_name = '$middlename', first_name='$firstname', phone = '$phone', address = '$address', organization = '$organization', job = '$job'
                     where id='$insert_account_id'";
+                    //insert data vao account
+                    $account_num = mysqli_num_rows(mysqli_query($connect_handle,"select id from account"));
+                    $insert_account_id = getNewId($account_num + 1);
+                    $insert_query = "insert into account values ('$insert_account_id','$user_name','$password')";
+                    $insert_result = mysqli_query($connect_handle, $insert_query);
                     $update_result = mysqli_query($connect_handle, $update_query);
                         echo 
                             "<script>
@@ -74,11 +74,15 @@ if(isset($_POST['signUpButton'])){
                                     $('#success-modal').modal('show');
                                 });
                             </script>";
-                };
-                else{
+                }else{
                     //chua co data -> insert
                     $insert_query = "insert into scientist (last_name, middle_name, first_name, phone, address, organization, job) 
                     values ('$lastname','$middlename','$firstname','$phone','$address','$organization','$job')";
+                    $insert_result = mysqli_query($connect_handle, $insert_query);
+                    //insert data vao account
+                    $account_num = mysqli_num_rows(mysqli_query($connect_handle,"select id from account"));
+                    $insert_account_id = getNewId($account_num + 1);
+                    $insert_query = "insert into account values ('$insert_account_id','$user_name','$password')";
                     $insert_result = mysqli_query($connect_handle, $insert_query);
                     echo 
                         "<script>

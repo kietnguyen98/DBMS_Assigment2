@@ -3,6 +3,7 @@ include('DBstart.php');
 
 $select_all_paper_query = "select * from paper;";
 $select_all_paper_result = mysqli_query($connect_handle, $select_all_paper_query);
+$get_option_result = NULL;
 
 if(isset($_POST['getMoreInfoBtn'])){
     $paperId=$_POST['paperId'];
@@ -81,8 +82,6 @@ if(isset($_POST['viewOption'])){
     $optionView = $_POST['optionView'];
     $authorid = $_POST['authorid'];
 
-    $result = NULL;
-
     $query5 = "select paper_id,title, case when paper_id in (select paper_id from research_paper) then 'Research Paper' 
     when paper_id in (select paper_id from review_paper) then 'Review Book Paper' 
     when paper_id in (select paper_id from general_paper) then 'General Paper' end as Category
@@ -122,23 +121,23 @@ if(isset($_POST['viewOption'])){
     
     switch ($optionView) {
         case '5':
-            $result = mysqli_query($connect_handle, $query5);
+            $get_option_result = mysqli_query($connect_handle, $query5);
         break;
 
         case '6':
-            $result = mysqli_query($connect_handle, $query6);
+            $get_option_result = mysqli_query($connect_handle, $query6);
         break;
 
         case '7':
-            $result = mysqli_query($connect_handle, $query7);
+            $get_option_result = mysqli_query($connect_handle, $query7);
         break;
 
         case '8':
-            $result = mysqli_query($connect_handle, $query8);
+            $get_option_result = mysqli_query($connect_handle, $query8);
         break;
 
         case '9':
-            $result = mysqli_query($connect_handle, $query9);
+            $get_option_result = mysqli_query($connect_handle, $query9);
         break;
 
         case '10':
@@ -173,8 +172,8 @@ if(isset($_POST['viewOption'])){
                     });
                 </script>";
         break;
-    }
-}
+    };
+};
 
 
 ?>

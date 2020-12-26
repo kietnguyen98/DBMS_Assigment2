@@ -22,7 +22,7 @@
         integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
 </head>
-<?php include('../Server/paper.php'); ?>
+<?php include('../Server/editorServer.php'); ?>
 
 <body>
     <div>
@@ -63,7 +63,7 @@
                         ?>
                     </td>
                     <td class="text-center">
-                        <form class="option" method="POST" action="homepage.php">
+                        <form class="option" method="POST" action="editorHomePage.php">
                             <input type="hidden" name="paperId" value="<?php echo $paper['paper_id'];?>" />
                             <button class="btn btn-success" name="getMoreInfoBtn">Xem chi tiết</button>
                             <button class="btn btn-primary" name="updateReivewer">Cập nhật phản biện</button>
@@ -192,7 +192,7 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <form method="POST" action="homepage.php">
+                        <form method="POST" action="editorHomePage.php">
                             <input type="hidden" name="paperIdToUpdate"
                                 value="<?php echo $moreinfo_paper_data['paper_id']; ?>" />
                             <button type="submit" class="btn btn-success" name="updatePaper">Cập nhật</button>
@@ -212,7 +212,7 @@
                         </h5>
                     </div>
                     <div class="modal-body">
-                        <form class="form-container" name="updateForm" method="POST" action="homepage.php">
+                        <form class="form-container" name="updateForm" method="POST" action="editorHomePage.php">
                             <div class="form-group">
                                 <label for="status"><strong>Tình trạng</strong></label>
                                 <select class="custom-select" name="status">
@@ -291,7 +291,7 @@
                         <?php else: ?>
                         <?php echo '<p><i class="text-left text-muted">Chưa có người phản biện</i></p>'; ?>
                         <?php endif ?>
-                        <form class="form-container" name="updateReviewerForm" method="POST" action="homepage.php">
+                        <form class="form-container" name="updateReviewerForm" method="POST" action="editorHomePage.php">
                             <div class="form-group">
                                 <label for="status"><strong>Thêm người phản biện</strong></label>
                                 <select class="custom-select" name="reviewer">
@@ -337,7 +337,7 @@
         <div class="display-4 text-center text-info text-uppercase" style="padding-top: 40px;">Danh sách các bài báo
             theo lựa chọn</div>
         <hr>
-        <form class="form-container" name="viewOption" method="POST" action="homepage.php">
+        <form class="form-container" name="viewOption" method="POST" action="editorHomePage.php">
             <label for="viewOption"><strong>chọn tính năng hiển thị</strong></label>
             <div class="form-row">
                 <div class="form-group col-md-8">
@@ -381,8 +381,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if($result != NULL):?>
-                <?php foreach ($result as $paper){ ?>
+                <?php if($get_option_result != NULL):?>
+                <?php foreach ($get_option_result as $paper){ ?>
                 <tr>
                     <td>
                         <?php echo '<strong>'.$paper['paper_id'].'</strong>'; ?>
